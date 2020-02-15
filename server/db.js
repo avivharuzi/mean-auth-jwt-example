@@ -11,6 +11,7 @@ const connect = async () => {
     await mongoose.connect(`mongodb://${config.database.username}:${config.database.password}@${config.database.hostname}:${config.database.port}/${config.database.name}`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useCreateIndex: true,
     });
 
     console.log(
