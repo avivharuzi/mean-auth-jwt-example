@@ -10,8 +10,7 @@ class AuthHandler {
     try {
       const user = await users.service.login(email, password);
       const accessToken = await AuthService.createAccessToken(user);
-      const refreshToken = AuthService.createRefreshToken();
-      refreshTokens[refreshToken] = user.id;
+      const refreshToken = await AuthService.createRefreshToken(user.id);
       res.send({ accessToken, refreshToken });
     } catch (err) {
       res.sendStatus(401);
@@ -19,11 +18,13 @@ class AuthHandler {
   }
 
   static async refresh(req, res) {
-    const { id, refreshToken } = req.body;
+    const { userId, refreshToken } = req.body;
 
-    if ((refreshToken in refreshTokens) && (refreshTokens[refreshToken] === id)) {
+    const isVerified = await AuthService.verifyRefreshToken(userId, refreshToken);
+
+    if (isVerified) {
       try {
-        const user = await users.service.getById(id);
+        const user = await users.service.getById(userId);
 
         const accessToken = await AuthService.createAccessToken(user);
         res.send({ accessToken });
@@ -35,12 +36,10 @@ class AuthHandler {
     }
   }
 
-  static logout(req, res) {
+  static async logout(req, res) {
     const { refreshToken } = req.body;
 
-    if (refreshToken in refreshTokens) {
-      delete refreshTokens[refreshToken];
-    }
+    await AuthService.deleteRefreshToken(refreshToken);
 
     res.sendStatus(204);
   }
