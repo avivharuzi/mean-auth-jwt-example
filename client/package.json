@@ -1,6 +1,7 @@
 {
   "name": "client",
   "version": "0.0.0",
+  "description": "MEAN Stack Authentication with JWT example - Client Side",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
