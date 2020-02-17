@@ -1,8 +1,6 @@
 const AuthService = require('./auth.service');
 const users = require('./../users');
 
-const refreshTokens = {};
-
 class AuthHandler {
   static async login(req, res) {
     const { email, password } = req.body;

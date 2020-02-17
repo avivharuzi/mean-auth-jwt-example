@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const randToken = require('rand-token');
 
 const config = require('./../../config');
-const RefreshToken = require('./refresh.token');
+const Token = require('./token');
 
 class AuthService {
   static async createAccessToken({ id, email, role }) {
@@ -37,7 +37,7 @@ class AuthService {
   static async createRefreshToken(userId) {
     const refreshToken = randToken.uid(256);
 
-    await RefreshToken.create({
+    await Token.create({
       userId,
       refreshToken,
     });
@@ -46,7 +46,7 @@ class AuthService {
   }
 
   static async verifyRefreshToken(userId, refreshToken) {
-    const refreshTokenExist = await RefreshToken.findOne({
+    const refreshTokenExist = await Token.findOne({
       userId,
       refreshToken,
     });
@@ -55,7 +55,7 @@ class AuthService {
   }
 
   static async deleteRefreshToken(refreshToken) {
-    return RefreshToken.delete({
+    return Token.delete({
       refreshToken,
     });
   }

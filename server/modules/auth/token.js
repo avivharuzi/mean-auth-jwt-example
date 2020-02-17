@@ -4,7 +4,7 @@ const config = require('../../config');
 
 const { Schema } = mongoose;
 
-const refreshTokenSchema = new Schema({
+const tokenSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -21,6 +21,6 @@ const refreshTokenSchema = new Schema({
   },
 }, { timestamps: true });
 
-const RefreshToken = mongoose.model('RefreshToken', refreshTokenSchema, 'refreshTokens');
+const Token = mongoose.model('Token', tokenSchema, 'tokens');
 
-module.exports = RefreshToken;
+module.exports = Token;
