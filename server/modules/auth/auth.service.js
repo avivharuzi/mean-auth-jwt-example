@@ -55,7 +55,7 @@ class AuthService {
   }
 
   static async deleteRefreshToken(refreshToken) {
-    return Token.delete({
+    return Token.deleteMany({
       refreshToken,
     });
   }
