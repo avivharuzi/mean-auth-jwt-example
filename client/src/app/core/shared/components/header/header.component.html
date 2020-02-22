@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <div class="d-flex justify-content-between" style="width: 100%">
+      <div>
+        <button mat-button routerLink="/">mean-auth-jwt-example</button>
+      </div>
+      <div>
+        <ng-container *ngIf="isLoggedIn; else notLoggedInTemplate">
+          <button mat-button (click)="logout()">Log out</button>
+        </ng-container>
+        <ng-template #notLoggedInTemplate>
+          <a class="mr-2" mat-button routerLink="/login">Log in</a>
+          <a mat-button routerLink="/signup">Sign up</a>
+        </ng-template>
+      </div>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
