@@ -17,6 +17,10 @@ class UserService {
     return User.findById(id);
   }
 
+  static async getByEmail(email) {
+    return User.findOne({ email });
+  }
+
   static async create(user) {
     return User.create({
       ...user,

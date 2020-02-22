@@ -16,14 +16,13 @@ class AuthHandler {
   }
 
   static async refresh(req, res) {
-    const { userId, refreshToken } = req.body;
+    const { email, refreshToken } = req.body;
 
-    const isVerified = await AuthService.verifyRefreshToken(userId, refreshToken);
+    const user = await users.service.getByEmail(email);
+    const isVerified = await AuthService.verifyRefreshToken(email, refreshToken);
 
     if (isVerified) {
       try {
-        const user = await users.service.getById(userId);
-
         const accessToken = await AuthService.createAccessToken(user);
         res.send({ accessToken });
       } catch (err) {
