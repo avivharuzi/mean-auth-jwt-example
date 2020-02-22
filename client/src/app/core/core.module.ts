@@ -9,6 +9,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {SharedModule} from "../shared/shared.module";
 import {MaterialModule} from "../material/material.module";
 
+import { GravatarModule } from  'ngx-gravatar';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {MaterialModule} from "../material/material.module";
     RouterModule,
     HttpClientModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    GravatarModule
   ],
   exports: [
     HomeComponent, NotFoundComponent

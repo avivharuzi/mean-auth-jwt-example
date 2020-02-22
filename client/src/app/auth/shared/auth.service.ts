@@ -45,7 +45,7 @@ export class AuthService {
   refreshToken() {
     return this.http.post<any>(`${this.apiUrl}/refresh`, {
       refreshToken: this.getRefreshToken(),
-      email: localStorage.getItem('EMAIL'),
+      email: this.getEmail(),
     }).pipe(tap((tokens: Tokens) => {
       this.storeAccessToken(tokens.accessToken);
     }));
@@ -53,6 +53,10 @@ export class AuthService {
 
   getAccessToken() {
     return localStorage.getItem(this.ACCESS_TOKEN);
+  }
+
+  getEmail() {
+    return localStorage.getItem('EMAIL');
   }
 
   private doLoginUser(email: string, tokens: Tokens) {

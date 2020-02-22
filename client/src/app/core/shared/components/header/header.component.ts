@@ -19,6 +19,10 @@ export class HeaderComponent implements OnInit {
     return this.authService.isLoggedIn();
   }
 
+  get email(): string {
+    return this.authService.getEmail();
+  }
+
   logout(): void {
     this.authService.logout().subscribe();
   }
