@@ -1,0 +1,31 @@
+<div class="row justify-content-center">
+  <div class="col-lg-6 md-12">
+    <ng-container *ngIf="isLoading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-container>
+    <mat-card>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field appearance="fill" style="width: 100%">
+              <mat-label>Email</mat-label>
+              <input [readonly]="isLoading" formControlName="email" type="email" matInput>
+            </mat-form-field>
+          </div>
+          <div class="col-12">
+            <mat-form-field appearance="fill" style="width: 100%">
+              <mat-label>Password</mat-label>
+              <input [readonly]="isLoading" formControlName="password" matInput [type]="hide ? 'password' : 'text'">
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="col-12">
+            <button [disabled]="isLoading" type="submit" mat-raised-button color="primary">Login</button>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>
