@@ -10,6 +10,8 @@
             <img alt="avatar" ngx-gravatar [email]="email">
           </button>
           <mat-menu #userMenu>
+            <button mat-menu-item routerLink="/settings/profile">Profile</button>
+            <mat-divider></mat-divider>
             <button mat-menu-item (click)="logout()">Log out</button>
           </mat-menu>
         </ng-container>

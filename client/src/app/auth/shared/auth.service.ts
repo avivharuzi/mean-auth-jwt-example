@@ -2,6 +2,7 @@ import { catchError, delay, mapTo, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { environment } from '../../../environments/environment';
 import { Tokens } from './tokens';
@@ -15,7 +16,7 @@ export class AuthService {
   private readonly ACCESS_TOKEN = 'ACCESS_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   login(user: { email: string, password: string }): Observable<boolean> {
@@ -71,6 +72,7 @@ export class AuthService {
   private doLogoutUser() {
     localStorage.removeItem('EMAIL');
     this.removeTokens();
+    this.router.navigate(['/']).then();
   }
 
   private getRefreshToken() {
