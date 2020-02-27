@@ -8,11 +8,14 @@ const connect = async () => {
   mongoose.Promise = bluebird;
 
   try {
-    await mongoose.connect(`mongodb://${config.database.username}:${config.database.password}@${config.database.hostname}:${config.database.port}/${config.database.name}`, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
+    await mongoose.connect(
+      `mongodb://${config.database.username}:${config.database.password}@${config.database.hostname}:${config.database.port}/${config.database.name}`,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+      },
+    );
 
     console.log(
       chalk.green('Connected to Database successfully on hostname'),
