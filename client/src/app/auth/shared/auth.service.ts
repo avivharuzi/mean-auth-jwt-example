@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { catchError, delay, mapTo, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
-import {catchError, delay, mapTo, tap} from 'rxjs/operators';
-import {environment} from "../../../environments/environment";
-import {Tokens} from "./tokens";
+
+import { environment } from '../../../environments/environment';
+import { Tokens } from './tokens';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly apiUrl = `${environment.baseApiUrl}/auth`;
@@ -14,7 +15,8 @@ export class AuthService {
   private readonly ACCESS_TOKEN = 'ACCESS_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   login(user: { email: string, password: string }): Observable<boolean> {
     return this.http.post<any>(`${this.apiUrl}/login`, user)
@@ -24,18 +26,20 @@ export class AuthService {
         mapTo(true),
         catchError(_ => {
           return of(false);
-        }));
+        }),
+      );
   }
 
   logout() {
     return this.http.post<any>(`${this.apiUrl}/logout`, {
-      refreshToken: this.getRefreshToken()
+      refreshToken: this.getRefreshToken(),
     }).pipe(
       tap(() => this.doLogoutUser()),
       mapTo(true),
       catchError(_ => {
         return of(false);
-      }));
+      }),
+    );
   }
 
   isLoggedIn() {

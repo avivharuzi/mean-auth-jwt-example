@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {AuthService} from "../../shared/auth.service";
-import {Router} from "@angular/router";
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   hide: boolean;
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit {
     this.form = this.fb.group({
       email: [],
       password: [],
-    })
+    });
   }
 
   onSubmit(): void {
@@ -43,7 +44,7 @@ export class LoginComponent implements OnInit {
     this.login();
   }
 
-  login(): void {
+  private login(): void {
     this.isLoading = true;
 
     const user = this.form.value;

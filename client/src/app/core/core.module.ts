@@ -1,29 +1,35 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './components/home/home.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
+import { GravatarModule } from 'ngx-gravatar';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
 import { CoreComponent } from './core.component';
 import { HeaderComponent } from './shared/components/header/header.component';
-import {RouterModule} from "@angular/router";
-import {HttpClientModule} from "@angular/common/http";
-import {SharedModule} from "../shared/shared.module";
-import {MaterialModule} from "../material/material.module";
-
-import { GravatarModule } from  'ngx-gravatar';
-
+import { HomeComponent } from './components/home/home.component';
+import { MaterialModule } from '../material/material.module';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [HomeComponent, NotFoundComponent, CoreComponent, HeaderComponent],
+  declarations: [
+    CoreComponent,
+    HeaderComponent,
+    HomeComponent,
+    NotFoundComponent,
+  ],
   imports: [
     CommonModule,
-    RouterModule,
+    GravatarModule,
     HttpClientModule,
     MaterialModule,
+    RouterModule,
     SharedModule,
-    GravatarModule
   ],
   exports: [
-    HomeComponent, NotFoundComponent
-  ]
+    HomeComponent,
+    NotFoundComponent,
+  ],
 })
-export class CoreModule { }
+export class CoreModule {
+}

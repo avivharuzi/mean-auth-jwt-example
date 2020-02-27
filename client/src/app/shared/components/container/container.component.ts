@@ -1,18 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 type ContainerType = 'default' | 'fluid';
 
 @Component({
   selector: 'app-container',
   templateUrl: './container.component.html',
-  styleUrls: ['./container.component.scss']
+  styleUrls: ['./container.component.scss'],
 })
-export class ContainerComponent implements OnInit {
-  @Input() type: ContainerType = 'default';
+export class ContainerComponent {
+  @Input() type: ContainerType;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
+    this.type = 'default';
   }
-
 }

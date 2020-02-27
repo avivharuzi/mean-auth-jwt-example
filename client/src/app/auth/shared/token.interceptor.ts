@@ -1,21 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from './auth.service';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 
+import { AuthService } from './auth.service';
+
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(public authService: AuthService) { }
+  constructor(private authService: AuthService) {
+  }
+
+  private static addToken(request: HttpRequest<any>, token: string) {
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     if (this.authService.getAccessToken()) {
-      request = this.addToken(request, this.authService.getAccessToken());
+      request = TokenInterceptor.addToken(request, this.authService.getAccessToken());
     }
 
     return next.handle(request).pipe(catchError(error => {
@@ -27,14 +41,6 @@ export class TokenInterceptor implements HttpInterceptor {
     }));
   }
 
-  private addToken(request: HttpRequest<any>, token: string) {
-    return request.clone({
-      setHeaders: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-  }
-
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
@@ -44,7 +50,7 @@ export class TokenInterceptor implements HttpInterceptor {
         switchMap((token: any) => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.accessToken);
-          return next.handle(this.addToken(request, token.accessToken));
+          return next.handle(TokenInterceptor.addToken(request, token.accessToken));
         }));
 
     } else {
@@ -52,8 +58,9 @@ export class TokenInterceptor implements HttpInterceptor {
         filter(token => token != null),
         take(1),
         switchMap(accessToken => {
-          return next.handle(this.addToken(request, accessToken));
-        }));
+          return next.handle(TokenInterceptor.addToken(request, accessToken));
+        }),
+      );
     }
   }
 }
