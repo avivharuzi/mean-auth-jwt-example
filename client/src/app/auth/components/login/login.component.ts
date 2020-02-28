@@ -29,19 +29,19 @@ export class LoginComponent implements OnInit {
     this.initForm();
   }
 
-  initForm(): void {
-    this.form = this.fb.group({
-      email: [],
-      password: [],
-    });
-  }
-
   onSubmit(): void {
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
 
     this.login();
+  }
+
+  private initForm(): void {
+    this.form = this.fb.group({
+      email: [],
+      password: [],
+    });
   }
 
   private login(): void {
