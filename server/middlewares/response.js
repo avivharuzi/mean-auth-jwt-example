@@ -33,19 +33,22 @@ module.exports = () => (req, res, next) => {
 
   res.locals.error = (err) => {
     if (!config.server.isProduction) {
-      console.log(chalk.red(err));
+      console.log(chalk.red(`Error occurred in request process, err: ${err}`));
     }
+
+    let errorHandler;
 
     if (!err || err.constructor.name !== 'ErrorHandler') {
-      // eslint-disable-next-line
-        err = new ErrorHandler(errors.unknown);
+      errorHandler = new ErrorHandler(errors.unknown);
+    } else {
+      errorHandler = err;
     }
 
-    res.status(err.statusCode);
+    res.status(errorHandler.statusCode);
 
     res.send({
-      message: err.message,
-      errors: err.errors,
+      message: errorHandler.message,
+      errors: errorHandler.errors,
     });
   };
 
