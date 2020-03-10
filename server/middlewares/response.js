@@ -1,5 +1,6 @@
 const chalk = require('chalk');
-const HttpStatus = require('http-status-codes');
+const httpMethods = require('http-methods-constants');
+const httpStatusCodes = require('http-status-codes');
 
 const config = require('./../config');
 const ErrorHandler = require('./../utils/error-handler');
@@ -10,19 +11,19 @@ module.exports = () => (req, res, next) => {
     let statusCode;
 
     switch (req.method) {
-      case 'DELETE':
-        statusCode = HttpStatus.NO_CONTENT;
+      case httpMethods.DELETE:
+        statusCode = httpStatusCodes.NO_CONTENT;
         break;
-      case 'GET':
-      case 'PATCH':
-      case 'PUT':
-        statusCode = HttpStatus.OK;
+      case httpMethods.GET:
+      case httpMethods.PATCH:
+      case httpMethods.PUT:
+        statusCode = httpStatusCodes.OK;
         break;
-      case 'POST':
-        statusCode = HttpStatus.CREATED;
+      case httpMethods.POST:
+        statusCode = httpStatusCodes.CREATED;
         break;
       default:
-        statusCode = HttpStatus.OK;
+        statusCode = httpStatusCodes.OK;
         break;
     }
 
