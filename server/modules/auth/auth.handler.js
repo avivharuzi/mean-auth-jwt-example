@@ -1,4 +1,6 @@
 const AuthService = require('./auth.service');
+const ErrorHandler = require('./../../utils/error-handler');
+const errors = require('./../../errors');
 const users = require('./../users');
 
 class AuthHandler {
@@ -9,27 +11,30 @@ class AuthHandler {
       const user = await users.service.login(email, password);
       const accessToken = await AuthService.createAccessToken(user);
       const refreshToken = await AuthService.createRefreshToken(user.id);
-      res.send({ accessToken, refreshToken });
+
+      res.locals.success({ accessToken, refreshToken });
     } catch (err) {
-      res.sendStatus(401);
+      res.locals.error(err);
     }
   }
 
   static async refresh(req, res) {
     const { email, refreshToken } = req.body;
 
-    const user = await users.service.getByEmail(email);
-    const isVerified = await AuthService.verifyRefreshToken(email, refreshToken);
+    try {
+      const user = await users.service.getByEmail(email);
+      const isVerified = await AuthService.verifyRefreshToken(email, refreshToken);
 
-    if (isVerified) {
-      try {
-        const accessToken = await AuthService.createAccessToken(user);
-        res.send({ accessToken });
-      } catch (err) {
-        res.sendStatus(401);
+      if (!isVerified) {
+        // noinspection ExceptionCaughtLocallyJS
+        throw new ErrorHandler(errors.unauthorized);
       }
-    } else {
-      res.sendStatus(401);
+
+      const accessToken = await AuthService.createAccessToken(user);
+
+      res.locals.success({ accessToken });
+    } catch (err) {
+      res.locals.error(err);
     }
   }
 
