@@ -1,3 +1,5 @@
+const ErrorHandler = require('./../../utils/error-handler');
+const errors = require('./../../errors');
 const User = require('./user');
 
 class UserService {
@@ -9,7 +11,7 @@ class UserService {
 
       return user;
     } catch (err) {
-      throw new Error('The email or password are invalid');
+      throw new ErrorHandler(errors.login);
     }
   }
 

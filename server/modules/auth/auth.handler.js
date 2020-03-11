@@ -36,9 +36,13 @@ class AuthHandler {
   static async logout(req, res) {
     const { refreshToken } = req.body;
 
-    await AuthService.deleteRefreshToken(refreshToken);
+    try {
+      await AuthService.deleteRefreshToken(refreshToken);
+    } catch (err) {
+      res.locals.error(err);
+    }
 
-    res.sendStatus(204);
+    res.locals.success();
   }
 }
 
