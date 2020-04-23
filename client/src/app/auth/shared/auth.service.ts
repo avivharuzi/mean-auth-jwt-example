@@ -5,6 +5,7 @@ import { of, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { environment } from '../../../environments/environment';
+import { LoginBody } from './login-body';
 import { Tokens } from './tokens';
 
 @Injectable({
@@ -13,26 +14,26 @@ import { Tokens } from './tokens';
 export class AuthService {
   private readonly apiUrl = `${environment.baseApiUrl}/auth`;
 
-  private readonly ACCESS_TOKEN = 'ACCESS_TOKEN';
-  private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
+  private readonly ITEM_ACCESS_TOKEN = 'ACCESS_TOKEN';
+  private readonly ITEM_REFRESH_TOKEN = 'REFRESH_TOKEN';
+  private readonly ITEM_EMAIL = 'EMAIL';
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
   }
 
-  login(user: { email: string, password: string }): Observable<boolean> {
-    return this.http.post<any>(`${this.apiUrl}/login`, user)
+  login(body: LoginBody): Observable<Tokens> {
+    return this.http.post<Tokens>(`${this.apiUrl}/login`, body)
       .pipe(
         delay(800),
-        tap(tokens => this.doLoginUser(user.email, tokens)),
-        mapTo(true),
-        catchError(_ => {
-          return of(false);
-        }),
+        tap(tokens => this.doLoginUser(body.email, tokens)),
       );
   }
 
-  logout() {
-    return this.http.post<any>(`${this.apiUrl}/logout`, {
+  logout(): Observable<boolean> {
+    return this.http.post<void>(`${this.apiUrl}/logout`, {
       refreshToken: this.getRefreshToken(),
     }).pipe(
       tap(() => this.doLogoutUser()),
@@ -43,53 +44,53 @@ export class AuthService {
     );
   }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     return !!this.getAccessToken();
   }
 
-  refreshToken() {
-    return this.http.post<any>(`${this.apiUrl}/refresh`, {
+  refreshToken(): Observable<Tokens> {
+    return this.http.post<Tokens>(`${this.apiUrl}/refresh`, {
       refreshToken: this.getRefreshToken(),
       email: this.getEmail(),
-    }).pipe(tap((tokens: Tokens) => {
+    }).pipe(tap(tokens => {
       this.storeAccessToken(tokens.accessToken);
     }));
   }
 
-  getAccessToken() {
-    return localStorage.getItem(this.ACCESS_TOKEN);
+  getAccessToken(): string {
+    return localStorage.getItem(this.ITEM_ACCESS_TOKEN);
   }
 
-  getEmail() {
-    return localStorage.getItem('EMAIL');
+  getEmail(): string {
+    return localStorage.getItem(this.ITEM_EMAIL);
   }
 
-  private doLoginUser(email: string, tokens: Tokens) {
-    localStorage.setItem('EMAIL', email);
+  private doLoginUser(email: string, tokens: Tokens): void {
+    localStorage.setItem(this.ITEM_EMAIL, email);
     this.storeTokens(tokens);
   }
 
-  private doLogoutUser() {
-    localStorage.removeItem('EMAIL');
+  private doLogoutUser(): void {
+    localStorage.removeItem(this.ITEM_EMAIL);
     this.removeTokens();
     this.router.navigate(['/']).then();
   }
 
-  private getRefreshToken() {
-    return localStorage.getItem(this.REFRESH_TOKEN);
+  private getRefreshToken(): string {
+    return localStorage.getItem(this.ITEM_REFRESH_TOKEN);
   }
 
-  private storeAccessToken(accessToken: string) {
-    localStorage.setItem(this.ACCESS_TOKEN, accessToken);
+  private storeAccessToken(accessToken: string): void {
+    localStorage.setItem(this.ITEM_ACCESS_TOKEN, accessToken);
   }
 
-  private storeTokens(tokens: Tokens) {
-    localStorage.setItem(this.ACCESS_TOKEN, tokens.accessToken);
-    localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
+  private storeTokens(tokens: Tokens): void {
+    localStorage.setItem(this.ITEM_ACCESS_TOKEN, tokens.accessToken);
+    localStorage.setItem(this.ITEM_REFRESH_TOKEN, tokens.refreshToken);
   }
 
-  private removeTokens() {
-    localStorage.removeItem(this.ACCESS_TOKEN);
-    localStorage.removeItem(this.REFRESH_TOKEN);
+  private removeTokens(): void {
+    localStorage.removeItem(this.ITEM_ACCESS_TOKEN);
+    localStorage.removeItem(this.ITEM_REFRESH_TOKEN);
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../shared/auth.service';
@@ -10,11 +10,10 @@ import { AuthService } from '../../shared/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  hide: boolean;
-
   isLoading: boolean;
-
-  form: FormGroup;
+  hide: boolean;
+  loginForm: FormGroup;
+  errorMessage: string;
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +29,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) {
+    if (this.loginForm.invalid) {
       return;
     }
 
@@ -38,24 +37,24 @@ export class LoginComponent implements OnInit {
   }
 
   private initForm(): void {
-    this.form = this.fb.group({
-      email: [],
-      password: [],
+    this.loginForm = this.fb.group({
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required]],
     });
   }
 
   private login(): void {
     this.isLoading = true;
 
-    const user = this.form.value;
+    const body = this.loginForm.value;
 
-    this.authService.login(user).subscribe(loggedIn => {
-      if (loggedIn) {
-        this.router.navigate(['/']).then();
-      } else {
-        // Error.
-      }
+    this.authService.login(body).subscribe(_ => {
+      this.router.navigate(['/']).then();
 
+      this.errorMessage = null;
+      this.isLoading = false;
+    }, err => {
+      this.errorMessage = err.error.message;
       this.isLoading = false;
     });
   }

@@ -10,16 +10,20 @@ import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
+import { Tokens } from './tokens';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private isRefreshing: boolean;
+  private refreshTokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+  ) {
+    this.isRefreshing = false;
   }
 
-  private static addToken(request: HttpRequest<any>, token: string) {
+  private static addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
     return request.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
@@ -41,18 +45,17 @@ export class TokenInterceptor implements HttpInterceptor {
     }));
   }
 
-  private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
       return this.authService.refreshToken().pipe(
-        switchMap((token: any) => {
+        switchMap((token: Tokens) => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.accessToken);
           return next.handle(TokenInterceptor.addToken(request, token.accessToken));
         }));
-
     } else {
       return this.refreshTokenSubject.pipe(
         filter(token => token != null),

@@ -4,22 +4,30 @@
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </ng-container>
     <mat-card>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div *ngIf="errorMessage">
+        <p class="alert alert-danger p-3">{{ errorMessage }}</p>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 mb-3">
             <mat-form-field appearance="fill" style="width: 100%">
               <mat-label>Email</mat-label>
+              <!--suppress HtmlFormInputWithoutLabel -->
               <input [readonly]="isLoading" formControlName="email" type="email" matInput>
+              <mat-error *ngIf="loginForm && loginForm.get('email').hasError('required')">Email is required</mat-error>
+              <mat-error *ngIf="loginForm && loginForm.get('email').hasError('email')">Email is invalid</mat-error>
             </mat-form-field>
           </div>
-          <div class="col-12">
+          <div class="col-12 mb-3">
             <mat-form-field appearance="fill" style="width: 100%">
               <mat-label>Password</mat-label>
+              <!--suppress HtmlFormInputWithoutLabel -->
               <input [readonly]="isLoading" formControlName="password" matInput [type]="hide ? 'password' : 'text'">
               <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
                       [attr.aria-pressed]="hide">
                 <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>
+              <mat-error *ngIf="loginForm && loginForm.get('password').hasError('required')">Password is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-12">
