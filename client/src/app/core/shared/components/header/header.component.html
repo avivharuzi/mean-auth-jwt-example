@@ -7,6 +7,7 @@
       <div>
         <ng-container *ngIf="isLoggedIn; else notLoggedInTemplate">
           <button mat-button [matMenuTriggerFor]="userMenu">
+            <!--suppress RequiredAttributes -->
             <img alt="avatar" ngx-gravatar [email]="email">
           </button>
           <mat-menu #userMenu>

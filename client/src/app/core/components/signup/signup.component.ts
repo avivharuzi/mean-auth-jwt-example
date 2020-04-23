@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-signup',
@@ -7,11 +7,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
-  hide: boolean;
-
   isLoading: boolean;
-
-  form: FormGroup;
+  hide: boolean;
+  signupForm: FormGroup;
+  errorMessage: string;
 
   constructor(
     private fb: FormBuilder,
@@ -25,21 +24,23 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) {
+    if (this.signupForm.invalid) {
       return;
     }
+
+    this.signup();
   }
 
   private initForm(): void {
-    this.form = this.fb.group({
-      firstName: [],
-      lastName: [],
-      email: [],
-      password: [],
+    this.signupForm = this.fb.group({
+      firstName: [null, [Validators.required]],
+      lastName: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required]],
     });
   }
 
   private signup(): void {
-    // Sign up here...
+    // TODO:: Sign up here...
   }
 }
