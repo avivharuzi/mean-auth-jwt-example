@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
+import { GravatarModule } from 'ngx-gravatar';
 import { NgModule } from '@angular/core';
 
+import { MaterialModule } from '../../material/material.module';
 import { SettingsComponent } from './settings.component';
 import { SettingsProfileComponent } from './components/settings-profile/settings-profile.component';
 import { SettingsRoutingModule } from './settings-routing.module';
@@ -12,6 +14,8 @@ import { SettingsRoutingModule } from './settings-routing.module';
   ],
   imports: [
     CommonModule,
+    GravatarModule,
+    MaterialModule,
     SettingsRoutingModule,
   ],
 })

@@ -1,1 +1,22 @@
-<p>settings-profile works!</p>
+<div *ngIf="userSettingsProfile$ | async as userSettingsProfile">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-sm-12">
+      <mat-card>
+        <mat-card-header class="d-flex justify-content-center align-items-center text-center">
+          <mat-card-title class="mb-3"
+                          style="text-align: center">{{ userSettingsProfile.firstName | titlecase }} {{ userSettingsProfile.lastName | titlecase }}</mat-card-title>
+          <mat-card-subtitle>{{ userSettingsProfile.email }}</mat-card-subtitle>
+        </mat-card-header>
+        <div class="d-flex w-100 justify-content-center mt-4">
+          <!--suppress RequiredAttributes -->
+          <img alt="avatar" mat-card-image ngx-gravatar size="250" [email]="userSettingsProfile.email">
+        </div>
+        <mat-card-content>
+          <div class="d-flex w-100 justify-content-center">
+            <p><b>Joined at</b> {{ userSettingsProfile.createdAt | date:'yyyy-mm-dd' }}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

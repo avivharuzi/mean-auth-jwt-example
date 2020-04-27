@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { UserService } from '../../../../core/shared/user.service';
+import { UserSettingsProfile } from '../../../../core/shared/user-settings-profile';
 
 @Component({
   selector: 'app-settings-profile',
@@ -6,4 +10,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./settings-profile.component.scss'],
 })
 export class SettingsProfileComponent {
+  userSettingsProfile$: Observable<UserSettingsProfile>;
+
+  constructor(
+    private userService: UserService,
+  ) {
+    this.userSettingsProfile$ = this.userService.settingsProfile();
+  }
 }

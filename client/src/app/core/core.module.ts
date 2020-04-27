@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { GravatarModule } from 'ngx-gravatar';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +13,7 @@ import { MaterialModule } from '../material/material.module';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { SharedModule } from '../shared/shared.module';
 import { SignupComponent } from './components/signup/signup.component';
+import { TokenInterceptor } from '../auth/shared/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,13 @@ import { SignupComponent } from './components/signup/signup.component';
     ReactiveFormsModule,
     RouterModule,
     SharedModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
   ],
   exports: [
     HomeComponent,
