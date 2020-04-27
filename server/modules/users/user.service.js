@@ -20,7 +20,7 @@ class UserService {
   }
 
   static async getProfile(id) {
-    return User.findById(id).select('-password');
+    return User.findById(id).select('-password -updatedAt');
   }
 
   static async getByEmail(email) {

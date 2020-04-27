@@ -36,7 +36,8 @@ class AuthHandler {
 
     try {
       const user = await users.service.getByEmail(email);
-      const isVerified = await AuthService.verifyRefreshToken(email, refreshToken);
+
+      const isVerified = await AuthService.verifyRefreshToken(user.id, refreshToken);
 
       if (!isVerified) {
         // noinspection ExceptionCaughtLocallyJS

@@ -3,9 +3,9 @@ const UserService = require('./user.service');
 class UserHandler {
   static async settingsProfile(req, res) {
     try {
-      const { id } = res.locals && res.locals.user;
+      const { id } = req.locals && req.locals.user;
 
-      const userProfile = await UserService.getById(id);
+      const userProfile = await UserService.getProfile(id);
 
       res.locals.success(userProfile);
     } catch (error) {
