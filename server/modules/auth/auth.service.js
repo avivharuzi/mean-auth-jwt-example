@@ -11,9 +11,9 @@ class AuthService {
         { id, email, role },
         config.accessToken.secret,
         { expiresIn: config.accessToken.expiresIn },
-        (err, token) => {
-          if (err) {
-            reject(err);
+        (error, token) => {
+          if (error) {
+            reject(error);
           } else {
             resolve(token);
           }
@@ -24,9 +24,9 @@ class AuthService {
 
   static async verifyAccessToken(accessToken) {
     return new Promise((resolve, reject) => {
-      jwt.verify(accessToken, config.accessToken.secret, (err, decoded) => {
-        if (err) {
-          reject(err);
+      jwt.verify(accessToken, config.accessToken.secret, (error, decoded) => {
+        if (error) {
+          reject(error);
         } else {
           resolve(decoded);
         }

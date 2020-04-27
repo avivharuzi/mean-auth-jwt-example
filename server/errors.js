@@ -5,6 +5,10 @@ module.exports = Object.freeze({
     statusCode: httpStatusCodes.BAD_REQUEST,
     message: 'One or more of the input values you entered are invalid',
   },
+  emailAlreadyExist: {
+    statusCode: httpStatusCodes.BAD_REQUEST,
+    message: 'The email you choose already exists try another',
+  },
   login: {
     statusCode: httpStatusCodes.UNAUTHORIZED,
     message: 'The email or password are invalid',

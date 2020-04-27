@@ -1,9 +1,22 @@
 const AuthService = require('./auth.service');
-const ErrorHandler = require('./../../utils/error-handler');
 const errors = require('./../../errors');
+const joiSchemas = require('./../../joi-schemas');
 const users = require('./../users');
+const utils = require('./../../utils');
 
 class AuthHandler {
+  static async signup(req, res) {
+    try {
+      const userBody = utils.validateJoiSchema(req.body, joiSchemas.userBodySchema);
+
+      await users.service.create(userBody);
+
+      res.locals.success({});
+    } catch (error) {
+      res.locals.error(error);
+    }
+  }
+
   static async login(req, res) {
     const { email, password } = req.body;
 
@@ -13,8 +26,8 @@ class AuthHandler {
       const refreshToken = await AuthService.createRefreshToken(user.id);
 
       res.locals.success({ accessToken, refreshToken });
-    } catch (err) {
-      res.locals.error(err);
+    } catch (error) {
+      res.locals.error(error);
     }
   }
 
@@ -27,14 +40,14 @@ class AuthHandler {
 
       if (!isVerified) {
         // noinspection ExceptionCaughtLocallyJS
-        throw new ErrorHandler(errors.unauthorized);
+        throw new utils.ErrorHandler(errors.unauthorized);
       }
 
       const accessToken = await AuthService.createAccessToken(user);
 
       res.locals.success({ accessToken });
-    } catch (err) {
-      res.locals.error(err);
+    } catch (error) {
+      res.locals.error(error);
     }
   }
 
@@ -43,8 +56,8 @@ class AuthHandler {
 
     try {
       await AuthService.deleteRefreshToken(refreshToken);
-    } catch (err) {
-      res.locals.error(err);
+    } catch (error) {
+      res.locals.error(error);
     }
 
     res.locals.success();

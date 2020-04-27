@@ -5,14 +5,14 @@ const SALT_WORK_FACTOR = 10;
 class Password {
   static async generateHash(password) {
     return new Promise((resolve, reject) => {
-      bcrypt.genSalt(SALT_WORK_FACTOR, (saltErr, salt) => {
-        if (saltErr) {
-          reject(saltErr);
+      bcrypt.genSalt(SALT_WORK_FACTOR, (saltError, salt) => {
+        if (saltError) {
+          reject(saltError);
         }
 
-        bcrypt.hash(password, salt, (hashErr, hashPassword) => {
-          if (hashErr) {
-            reject(hashErr);
+        bcrypt.hash(password, salt, (hashError, hashPassword) => {
+          if (hashError) {
+            reject(hashError);
           }
 
           resolve(hashPassword);
@@ -23,9 +23,9 @@ class Password {
 
   static async compare(password, hashPassword) {
     return new Promise((resolve, reject) => {
-      bcrypt.compare(password, hashPassword, (err, hasMatch) => {
-        if (err) {
-          reject(err);
+      bcrypt.compare(password, hashPassword, (error, hasMatch) => {
+        if (error) {
+          reject(error);
         } else if (hasMatch) {
           resolve(hasMatch);
         } else {

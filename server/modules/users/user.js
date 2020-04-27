@@ -41,8 +41,8 @@ userSchema.pre('save', async function (next) {
     user.password = await Password.generateHash(user.password);
 
     next();
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
 

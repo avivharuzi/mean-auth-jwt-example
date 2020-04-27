@@ -3,8 +3,8 @@ const httpMethods = require('http-methods-constants');
 const httpStatusCodes = require('http-status-codes');
 
 const config = require('./../config');
-const ErrorHandler = require('./../utils/error-handler');
 const errors = require('./../errors');
+const utils = require('./../utils');
 
 module.exports = () => (req, res, next) => {
   res.locals.success = (data) => {
@@ -32,17 +32,17 @@ module.exports = () => (req, res, next) => {
     res.send(data);
   };
 
-  res.locals.error = (err) => {
+  res.locals.error = (error) => {
     if (!config.server.isProduction) {
-      console.log(chalk.red(`Error occurred in request process, err: ${err}`));
+      console.log(chalk.red(`Error occurred in request process, error: ${JSON.stringify(error)}`));
     }
 
     let errorHandler;
 
-    if (!err || err.constructor.name !== 'ErrorHandler') {
-      errorHandler = new ErrorHandler(errors.unknown);
+    if (!error || error.constructor.name !== 'ErrorHandler') {
+      errorHandler = new utils.ErrorHandler(errors.unknown);
     } else {
-      errorHandler = err;
+      errorHandler = error;
     }
 
     res.status(errorHandler.statusCode);

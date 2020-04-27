@@ -1,8 +1,8 @@
 const _ = require('lodash/core');
 
 const auth = require('./../modules/auth');
-const ErrorHandler = require('./../utils/error-handler');
 const errors = require('./../errors');
+const utils = require('./../utils');
 
 module.exports = async (req, res, next) => {
   if (req.method === 'OPTIONS') {
@@ -23,7 +23,7 @@ module.exports = async (req, res, next) => {
       req.locals.user = await auth.service.verifyAccessToken(accessToken);
 
       isAuthenticated = true;
-    } catch (err) {
+    } catch (error) {
       // If we got an error do nothing because the default isAuthenticated is false.
     }
   }
@@ -31,6 +31,6 @@ module.exports = async (req, res, next) => {
   if (isAuthenticated) {
     next();
   } else {
-    res.locals.error(new ErrorHandler(errors.unauthorized));
+    res.locals.error(new utils.ErrorHandler(errors.unauthorized));
   }
 };
