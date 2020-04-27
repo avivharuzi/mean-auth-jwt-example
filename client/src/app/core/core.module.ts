@@ -12,7 +12,7 @@ import { HomeComponent } from './components/home/home.component';
 import { MaterialModule } from '../material/material.module';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { SharedModule } from '../shared/shared.module';
-import { SignupComponent } from './components/signup/signup.component';
+import { SignupComponent } from '../auth/components/signup/signup.component';
 import { TokenInterceptor } from '../auth/shared/token.interceptor';
 
 @NgModule({

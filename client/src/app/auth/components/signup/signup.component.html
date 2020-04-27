@@ -1,0 +1,65 @@
+<div class="row justify-content-center">
+  <div class="col-lg-6 md-12">
+    <ng-container *ngIf="isLoading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-container>
+    <mat-card>
+     <ng-container *ngIf="!isSuccess; else successTemplate">
+       <div *ngIf="errorMessage">
+         <p class="alert alert-danger p-3">{{ errorMessage }}</p>
+       </div>
+       <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+         <div class="row">
+           <div class="col-12 mb-3">
+             <mat-form-field appearance="fill" style="width: 100%">
+               <mat-label>First Name</mat-label>
+               <!--suppress HtmlFormInputWithoutLabel -->
+               <input [readonly]="isLoading" formControlName="firstName" type="email" matInput>
+               <mat-error *ngIf="signupForm && signupForm.get('firstName').hasError('required')">First Name is required
+               </mat-error>
+             </mat-form-field>
+           </div>
+           <div class="col-12 mb-3">
+             <mat-form-field appearance="fill" style="width: 100%">
+               <mat-label>Last Name</mat-label>
+               <!--suppress HtmlFormInputWithoutLabel -->
+               <input [readonly]="isLoading" formControlName="lastName" type="email" matInput>
+               <mat-error *ngIf="signupForm && signupForm.get('lastName').hasError('required')">Last Name is required
+               </mat-error>
+             </mat-form-field>
+           </div>
+           <div class="col-12 mb-3">
+             <mat-form-field appearance="fill" style="width: 100%">
+               <mat-label>Email</mat-label>
+               <!--suppress HtmlFormInputWithoutLabel -->
+               <input [readonly]="isLoading" formControlName="email" type="email" matInput>
+               <mat-error *ngIf="signupForm && signupForm.get('email').hasError('required')">Email is required
+               </mat-error>
+               <mat-error *ngIf="signupForm && signupForm.get('email').hasError('email')">Email is invalid</mat-error>
+             </mat-form-field>
+           </div>
+           <div class="col-12 mb-3">
+             <mat-form-field appearance="fill" style="width: 100%">
+               <mat-label>Password</mat-label>
+               <!--suppress HtmlFormInputWithoutLabel -->
+               <input [readonly]="isLoading" formControlName="password" matInput [type]="hide ? 'password' : 'text'">
+               <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                       [attr.aria-pressed]="hide">
+                 <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+               </button>
+               <mat-error *ngIf="signupForm && signupForm.get('password').hasError('required')">Password is required
+               </mat-error>
+             </mat-form-field>
+           </div>
+           <div class="col-12">
+             <button [disabled]="isLoading" type="submit" mat-raised-button color="primary">Sign up</button>
+           </div>
+         </div>
+       </form>
+     </ng-container>
+      <ng-template #successTemplate>
+        <p class="alert alert-success p-3">You have been successfully registered <a mat-flat-button routerLink="/login">click here</a> to log in</p>
+      </ng-template>
+    </mat-card>
+  </div>
+</div>

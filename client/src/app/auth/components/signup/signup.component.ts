@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { AuthService } from '../../shared/auth.service';
+import { SignupBody } from '../../shared/signup-body';
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -11,12 +14,15 @@ export class SignupComponent implements OnInit {
   hide: boolean;
   signupForm: FormGroup;
   errorMessage: string;
+  isSuccess: boolean;
 
   constructor(
+    private authService: AuthService,
     private fb: FormBuilder,
   ) {
     this.isLoading = false;
     this.hide = true;
+    this.isSuccess = false;
   }
 
   ngOnInit(): void {
@@ -41,6 +47,14 @@ export class SignupComponent implements OnInit {
   }
 
   private signup(): void {
-    // TODO:: Sign up here...
+    const body: SignupBody = this.signupForm.value;
+
+    this.authService.signup(body).subscribe(res => {
+      this.isSuccess = true;
+      this.isLoading = false;
+    }, err =>  {
+      this.errorMessage = err.error.message;
+      this.isLoading = false;
+    });
   }
 }

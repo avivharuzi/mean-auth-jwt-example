@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LoginBody } from './login-body';
 import { Tokens } from './tokens';
+import { SignupBody } from './signup-body';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,13 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
   ) {
+  }
+
+  signup(body: SignupBody): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/signup`, body)
+      .pipe(
+        delay(800),
+      );
   }
 
   login(body: LoginBody): Observable<Tokens> {
