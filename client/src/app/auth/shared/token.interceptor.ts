@@ -15,12 +15,13 @@ import { Tokens } from './tokens';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   private isRefreshing: boolean;
-  private refreshTokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  private refreshTokenSubject: BehaviorSubject<string>;
 
   constructor(
     private authService: AuthService,
   ) {
     this.isRefreshing = false;
+    this.refreshTokenSubject = new BehaviorSubject<string>(null);
   }
 
   private static addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
@@ -38,6 +39,10 @@ export class TokenInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
+        if (this.isRefreshing) {
+          this.authService.logout().subscribe();
+        }
+
         return this.handle401Error(request, next);
       } else {
         return throwError(error);

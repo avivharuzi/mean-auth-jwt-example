@@ -1,7 +1,7 @@
 import { catchError, delay, mapTo, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of, Observable } from 'rxjs';
+import { of, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { environment } from '../../../environments/environment';
@@ -60,9 +60,16 @@ export class AuthService {
     return this.http.post<Tokens>(`${this.apiUrl}/refresh`, {
       refreshToken: this.getRefreshToken(),
       email: this.getEmail(),
-    }).pipe(tap(tokens => {
-      this.storeAccessToken(tokens.accessToken);
-    }));
+    }).pipe(
+      tap(tokens => {
+        this.storeAccessToken(tokens.accessToken);
+      }),
+      catchError(error => {
+        this.logout().subscribe();
+
+        return throwError(error);
+      }),
+    );
   }
 
   getAccessToken(): string {
