@@ -56,3 +56,7 @@ To run server (will run at localhost:8080)
 ```bash
 cd server && npm start
 ```
+
+# License
+
+[MIT](LICENSE)
