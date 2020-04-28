@@ -53,8 +53,8 @@ export class LoginComponent implements OnInit {
 
       this.errorMessage = null;
       this.isLoading = false;
-    }, err => {
-      this.errorMessage = err.error.message;
+    }, error => {
+      this.errorMessage = error.error.message;
       this.isLoading = false;
     });
   }

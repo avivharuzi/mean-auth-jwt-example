@@ -49,11 +49,11 @@ export class SignupComponent implements OnInit {
   private signup(): void {
     const body: SignupBody = this.signupForm.value;
 
-    this.authService.signup(body).subscribe(res => {
+    this.authService.signup(body).subscribe(_ => {
       this.isSuccess = true;
       this.isLoading = false;
-    }, err =>  {
-      this.errorMessage = err.error.message;
+    }, error =>  {
+      this.errorMessage = error.error.message;
       this.isLoading = false;
     });
   }
