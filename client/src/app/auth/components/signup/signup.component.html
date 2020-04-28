@@ -8,7 +8,7 @@
        <div *ngIf="errorMessage">
          <p class="alert alert-danger p-3">{{ errorMessage }}</p>
        </div>
-       <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+       <form [formGroup]="signupForm" (keydown.enter)="onSubmit()" (ngSubmit)="onSubmit()">
          <div class="row">
            <div class="col-12 mb-3">
              <mat-form-field appearance="fill" style="width: 100%">
